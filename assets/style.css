@@ -1,0 +1,46 @@
+/* assets/style.css */
+.hero-section {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.feature-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.stats-number {
+    font-size: 2.5rem;
+    font-weight: bold;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .display-4 {
+        font-size: 2rem;
+    }
+    
+    .stats-number {
+        font-size: 2rem;
+    }
+}
+
+/* Custom styling for cards */
+.card {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
+}
+
+.card:hover {
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Table styling */
+.table {
+    font-size: 0.9rem;
+}
+
+.table th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+}
