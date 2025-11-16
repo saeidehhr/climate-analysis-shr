@@ -34,6 +34,7 @@ df['Longitude_num'] = df['Longitude'].apply(convert_lat_lon)
 
 # Use Bootstrap theme
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.FLATLY], suppress_callback_exceptions=True)
+server = app.server
 
 # Navigation
 navbar = dbc.Navbar(
