@@ -52,7 +52,7 @@ navbar = dbc.Navbar(
             dbc.Nav([
                 dbc.NavItem(dbc.NavLink("Home", href="/", id="home-link")),
                 dbc.NavItem(dbc.NavLink("Dashboard", href="/dashboard", id="dashboard-link")),
-                dbc.NavItem(dbc.NavLink("About", href="#")),
+                dbc.NavItem(dbc.NavLink("About", href="/about")),
             ], className="ms-auto", navbar=True),
             id="navbar-collapse",
             navbar=True,
@@ -99,7 +99,8 @@ landing_page = dbc.Container([
                         dbc.Button("About Data", 
                                   id="about-data-btn",
                                   color="outline-primary", 
-                                  size="lg"),
+                                  size="lg",
+                                  href='/about-data'),
                     ], className="text-center")
                 ])
             ], className="border-0 bg-transparent")
@@ -120,7 +121,7 @@ landing_page = dbc.Container([
                     html.Div([
                         html.H1("📊", style={'fontSize': '3rem'}),
                         html.H4("Historical Data"),
-                        html.P("Temperature data from 1743 to 2013 from cities around the world")
+                        html.P("Temperature data from 1985 to 2013 from cities around the world")
                     ], className="text-center")
                 ])
             ], className="h-100")
@@ -217,11 +218,46 @@ landing_page = dbc.Container([
     ])
 ], fluid=True)
 
+about_layout = dbc.Container([
+    dbc.Row([
+        dbc.Col([
+            dbc.Card([
+                dbc.CardHeader(html.H2("About")),
+                dbc.CardBody([
+                    html.P("""
+   Welcome to a research-driven environment where climate data becomes a foundation for understanding global environmental change. This website is built to provide a scientifically grounded exploration of climate patterns through interactive visualizations and analytical tools designed for both learning and discovery. Our platform integrates curated datasets, computational analysis, and geospatial visualization to help users examine how Earth’s climate has evolved over the past several decades. By transforming raw climate records into clear, interpretable findings, this website supports deeper engagement with the science behind global warming, temperature anomalies, and long-term atmospheric trends. Whether you are a student developing your analytical skills, a researcher seeking data-informed insights, or an interested learner exploring environmental change, this platform offers an accessible yet scientifically robust space for understanding climate dynamics. We aim to bridge the gap between raw environmental data and meaningful interpretation by combining transparent methodology, user-centered design, and clear communication. Ultimately, this project is designed to encourage informed exploration—helping you view the climate narrative of our planet through a lens that is data-driven, evidence-based, and grounded in scientific inquiry.                 
+""")
+                ])
+            ])
+        ], width=12)
+    ])
+], fluid=True)
+
+about_data_layout = dbc.Container([
+    dbc.Row([
+        dbc.Col([
+            dbc.Card([
+                dbc.CardHeader(html.H2("About Data")),
+                dbc.CardBody([
+                    html.P("""
+  Our climate analysis relies on high-quality datasets sourced directly from Kaggle, a well-known platform for sharing open data. These records include global temperature measurements starting from 1985 onward, allowing us to focus on recent climate trends and make the data both transparent and accessible. By cleaning and structuring this information, we ensure that users can easily explore and understand the patterns of global warming over the past few decades. In short, the data you see here is built on a solid foundation from Kaggle’s resources, making our climate insights reliable and informative.              
+""")
+                ])
+            ])
+        ], width=12)
+    ])
+], fluid=True)
+
+
 # Store to track current page
 current_page_store = dcc.Store(id='current-page', data='/')
 
 # Main Dashboard
 def create_dashboard():
+    month_names = [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+]
     # Sidebar
     sidebar = dbc.Card([
         dbc.CardBody([
@@ -240,7 +276,7 @@ def create_dashboard():
             html.H6("Select Month", className="mt-4"),
             dcc.Dropdown(
                 id='month-dropdown',
-                options=[{'label': f'Month {i}', 'value': i} for i in range(1, 13)],
+                options=[{'label': name, 'value': i} for i, name in enumerate(month_names)],
                 value=7,
                 clearable=False
             ),
@@ -318,7 +354,11 @@ def create_dashboard():
                     dbc.Col([
                         dbc.Card([
                             dbc.CardBody([
-                                dcc.Graph(id='world-map', style={'height': '500px'})
+                                dcc.Graph(id='world-map', style={'height': '500px'}, config={
+                                    'scrollZoom': True,
+                                    'displayModeBar': True,
+                                    'responsive':True
+                                })
                             ])
                         ])
                     ], width=12)
@@ -350,6 +390,10 @@ app.layout = html.Div([
     [Input('url', 'pathname')]
 )
 def display_page(pathname):
+    if pathname == '/about':
+        return about_layout
+    if pathname == '/about-data':
+        return about_data_layout
     if pathname == '/dashboard':
         return create_dashboard()
     else:
